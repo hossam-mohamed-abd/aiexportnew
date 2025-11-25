@@ -16,11 +16,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
+  apiKey: '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',
   baseURL: "https://api.groq.com/openai/v1"
 });
 
-console.log("✅ Groq API Key loaded:", process.env.GROQ_API_KEY ? "YES ✅" : "NO ❌");
+console.log("✅ Groq API Key loaded:", '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' ? "YES ✅" : "NO ❌");
 
 app.get("/test", (req, res) => {
   res.json({ status: "Server working! 🚀" });
@@ -180,9 +180,17 @@ Always maintain a helpful, professional, and encouraging tone. Remember: You're 
   }
 });
 
+// FRONTEND PATH
+const frontendPath = path.join(__dirname, "../frontend");
+
+// Serve all static files (CSS, JS, IMAGES, etc.)
+app.use(express.static(frontendPath));
+
+// Homepage Route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
+
 
 app.listen(3000, () => {
   console.log("🚀 Backend: http://localhost:3000");
