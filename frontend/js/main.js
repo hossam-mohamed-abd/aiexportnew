@@ -5,7 +5,7 @@ document.querySelector(".go-to-tracks").addEventListener("click", function (e) {
   });
 });
 function openInNewTab(url) {
-  window.open(url, '_blank');
+  window.open(url, '_self');
 }
 
 function countVisit() {
