@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AskTrack - Vodafone Cash Payment</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: radial-gradient(circle at top, #1b0d23, #05030a);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .payment-container {
+        width: 90%;
+        max-width: 450px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+        padding: 25px;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .payment-title {
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .input-group label {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+
+      .input-group input {
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        outline: none;
+      }
+
+      .input-group input:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .pay-btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px;
+        background: linear-gradient(135deg, #ff0000, #ff4545);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 16px;
+      }
+
+      .pay-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .note {
+        margin-top: 15px;
+        text-align: center;
+        font-size: 13px;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get("plan");
+
+        let priceText = "";
+
+        if (plan === "30min") {
+          priceText = "30 EGP / نصف ساعة";
+        } else if (plan === "monthly") {
+          priceText = "100 EGP / اشتراك شهري";
+        } else {
+          priceText = "30 EGP / نصف ساعة";
+        }
+
+        document.getElementById("price").value = priceText;
+      };
+    </script>
+
+    <div class="payment-container">
+      <div class="payment-title">الدفع عبر فودافون كاش</div>
+
+      <div class="input-group">
+        <label>الاسم الكامل</label>
+        <input type="text" id="name" placeholder="اكتب اسمك هنا" required />
+      </div>
+
+      <div class="input-group">
+        <label>رقم الهاتف المُرسل منه (Vodafone Cash)</label>
+        <input type="text" id="phone" placeholder="01xxxxxxxxx" required />
+      </div>
+
+      <div class="input-group">
+        <label>البريد الإلكتروني (اختياري)</label>
+        <input type="email" id="email" placeholder="example@gmail.com" />
+      </div>
+
+      <div class="input-group">
+        <label>قيمة الاشتراك</label>
+        <input type="text" id="price" disabled />
+      </div>
+
+      <button class="pay-btn" onclick="submitPayment()">
+        إرسال بيانات الدفع
+      </button>
+
+      <div class="note">
+        بعد إرسال البيانات، سيتم مراجعة التحويل وتفعيل الجلسة في خلال دقائق.
+      </div>
+    </div>
+
+    <div
+      id="loadingOverlay"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      "
+    >
+      <div class="loader"></div>
+    </div>
+
+    <style>
+      .loader {
+        border: 5px solid rgba(255, 255, 255, 0.2);
+        border-top: 5px solid #00ffa3;
+        border-radius: 50%;
+        width: 55px;
+        height: 55px;
+        animation: spin 0.9s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      function submitPayment() {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const plan = document.getElementById("price").value.trim();
+
+        if (!name || !phone) {
+          alert("من فضلك املأ البيانات المطلوبة.");
+          return;
+        }
+
+        // تشغيل شاشة التحميل
+        document.getElementById("loadingOverlay").style.display = "flex";
+
+        const API_URL =
+          "https://script.google.com/macros/s/AKfycbxDWQNwl_NIxpsJ6rpZ0PUFwGTycoRuBDHvntoyAj7BpGUmtjKcA8Pkl_SIDOQvP50N/exec";
+
+        fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            name: name,
+            phone: phone,
+            email: email,
+            plan: plan,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+
+            // إظهار التحميل ثم التحويل بعد نصف ثانية
+            setTimeout(() => {
+              window.location.href = "../seccess.html";
+            }, 800);
+          })
+          .catch((err) => {
+            document.getElementById("loadingOverlay").style.display = "none";
+            alert("حدث خطأ أثناء الإرسال");
+            console.error(err);
+          });
+      }
+    </script>
+  </body>
+</html>

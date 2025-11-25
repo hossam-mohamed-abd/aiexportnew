@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AskTrack - Expert Plans</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background-image: url(../../images/background-dark.jpg);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .plans-container {
+        width: 90%;
+        max-width: 650px;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+      }
+
+      .plans-title {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .plans-boxes {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .plan-card {
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition: 0.2s;
+        cursor: pointer;
+      }
+
+      .plan-card:hover {
+        transform: scale(1.03);
+        border-color: #00ffa3;
+      }
+
+      .plan-title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .plan-price {
+        font-size: 17px;
+        margin: 5px 0 10px;
+        color: #00ffa3;
+      }
+
+      .plan-desc {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 12px;
+      }
+
+      .plan-btn {
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #00ffa3, #00d18b);
+        color: #000;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .plan-btn:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="plans-container">
+      <h1 class="plans-title">اختر نوع الاشتراك للتواصل مع الخبير</h1>
+
+      <div class="plans-boxes">
+        <!-- خطة نص ساعة -->
+        <div
+          class="plan-card"
+          onclick="openInNewTab('../payment/payment.html')"
+        >
+          <div class="plan-title">جلسة لمدة نصف ساعة</div>
+          <div class="plan-price">30 EGP</div>
+          <div class="plan-desc">
+            اسأل أي سؤال، خبير حقيقي يشرح لك ويوضح لك الطريق بسرعة.
+          </div>
+          <button class="plan-btn">ابدأ الجلسة</button>
+        </div>
+
+        <!-- خطة شهرية -->
+        <div class="plan-card" onclick="openPlan('monthly')">
+          <div class="plan-title">اشتراك متابعة شهرية</div>
+          <div class="plan-price">100 EGP / شهر</div>
+          <div class="plan-desc">
+            متابعة يومية—يساعدك تتقدم في كورس، وتعرف أنت واقف فين وتتعلم إيه
+            بعده.
+          </div>
+          <button class="plan-btn">اشترك الآن</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function selectPlan(type) {
+        // حفظ نوع الاشتراك
+        localStorage.setItem("expert_plan", type);
+
+        // تحويل المستخدم لصفحة الخبير
+        window.location.href = "human.html";
+      }
+      function openInNewTab(url) {
+        window.open(url, "_blank");
+      }
+
+      function openPlan(plan) {
+        window.location.href = "../payment/payment.html?plan=" + plan;
+      }
+    </script>
+  </body>
+</html>

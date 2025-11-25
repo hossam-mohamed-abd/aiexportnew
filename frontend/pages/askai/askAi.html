@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AskTrack - AI Assistant</title>
+    <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <style>
+      main {
+        margin: 0;
+        padding: 0;
+        background: radial-gradient(circle at top, #0d1b3d, #030712);
+        font-family: "Poppins", sans-serif;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        padding-top: 30px;
+        direction: rtl; /* مهم للعربي */
+      }
+
+      .ai-container {
+        width: 90%;
+        max-width: 750px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .ai-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 12px 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .ai-logo {
+        width: 40px;
+      }
+
+      .ai-title {
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      .chat-box {
+        height: 65vh;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      /* ==============================
+      رسائل المستخدم والـ AI
+   ============================== */
+
+      .message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-size: 15px;
+        line-height: 1.5;
+        animation: fadeIn 0.3s ease;
+        white-space: pre-wrap;
+      }
+
+      /* رسالة المستخدم (على اليسار) */
+      .user-message {
+        margin-right: auto;
+        background: rgba(0, 173, 255, 0.15);
+        border: 1px solid rgba(0, 173, 255, 0.4);
+        backdrop-filter: blur(12px);
+      }
+
+      /* رسالة الـ AI (على اليمين) */
+      .ai-message {
+        margin-left: auto;
+        background: rgba(0, 173, 255, 0.15);
+        border: 1px solid rgba(0, 173, 255, 0.4);
+        backdrop-filter: blur(12px);
+      }
+
+      /* رسالة التحميل */
+      .loading {
+        margin-right: auto;
+        background: rgba(0, 173, 255, 0.1);
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+        border: 1px dashed rgba(0, 173, 255, 0.4);
+      }
+
+      /* ============================== */
+
+      .input-area {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .input-area input {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        backdrop-filter: blur(8px);
+        outline: none;
+      }
+
+      .input-area button {
+        background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+        border: none;
+        padding: 12px 25px;
+        border-radius: 12px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .input-area button:hover {
+        transform: scale(1.05);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(7px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav id="nav" class="position-fixed top-0 start-0 end-0 text-white">
+      <div class="container d-flex justify-content-between align-items-center">
+        <div class="logo glass-logo d-flex align-items-center gap-2">
+          <img src="../../images/logo.png" alt="logo" class="logo-img" />
+          <span class="logo-text">AskTrack</span>
+        </div>
+
+        <ul class="nav-menu m-0 d-flex align-items-center gap-4">
+          <li class="nav-dropdown">
+            <a>EN</a>
+            <div class="nav-dropdown-content">
+              <div class="glass-bg-width-temp"></div>
+              <div class="glass-bg">
+                <a>Ar</a>
+                <a>Fr</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-dropdown">
+            <a>Mode</a>
+            <div class="nav-dropdown-content">
+              <div class="glass-bg-width-temp"></div>
+              <div class="glass-bg">
+                <a>Dark Mode</a>
+                <a>White Mode</a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <button class="login-btn">LogIn</button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <div class="ai-container mt-4">
+        <header class="ai-header">
+          <img src="../../images/logo.png" class="ai-logo" />
+          <span class="ai-title">AskTrack AI Assistant</span>
+        </header>
+
+        <div class="chat-box" id="chatBox">
+          <div class="message ai-message">👋 أهلاً! ازاي أقدر أساعدك؟</div>
+        </div>
+
+        <div class="input-area">
+          <input
+            id="messageInput"
+            type="text"
+            placeholder="اسأل عن أي شيء بتتعلمه..."
+          />
+          <button id="sendBtn" onclick="sendMessage()">إرسال</button>
+        </div>
+      </div>
+    </main>
+    <script>
+      const chatBox = document.getElementById("chatBox");
+      const messageInput = document.getElementById("messageInput");
+      const sendBtn = document.getElementById("sendBtn");
+
+      async function sendMessage() {
+        const message = messageInput.value.trim();
+
+        if (!message) {
+          alert("من فضلك اكتب رسالة");
+          return;
+        }
+
+        addMessage(message, "user");
+        messageInput.value = "";
+        sendBtn.disabled = true;
+
+        const loadingDiv = document.createElement("div");
+        loadingDiv.className = "loading";
+        loadingDiv.id = "loading";
+        loadingDiv.textContent = "⏳ جاري الكتابة...";
+        chatBox.appendChild(loadingDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+          const response = await fetch("/api/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message }),
+          });
+
+          const data = await response.json();
+          document.getElementById("loading")?.remove();
+
+          if (data.reply) {
+            addMessage(data.reply, "ai");
+          } else if (data.error) {
+            addMessage("❌ خطأ: " + data.message, "ai");
+          } else {
+            addMessage("عذرًا، حدث خطأ. حاول مرة أخرى.", "ai");
+          }
+        } catch (error) {
+          document.getElementById("loading")?.remove();
+          addMessage("❌ خطأ في الاتصال بالسيرفر", "ai");
+          console.error("Error:", error);
+        }
+
+        sendBtn.disabled = false;
+        messageInput.focus();
+      }
+
+      function addMessage(text, type) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${type}-message`;
+        messageDiv.textContent = text;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      window.onload = () => {
+        messageInput.focus();
+      };
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          sendMessage();
+        }
+      });
+    </script>
+  </body>
+</html>
